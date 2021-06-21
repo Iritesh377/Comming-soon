@@ -56,20 +56,59 @@
           <h4>Seconds</h4>
         </div>
       </div>
-
-      <div class="subscribe">
-        <h4>Subscribe now to get the latest updates!</h4>
-        <form action="thankyou.html" method="post" role="form" class="php-email-form">
-          <div class="subscribe-form">
-            <input type="email" name="email" required><input type="submit" value="Subscribe">
+      
+  <div class="wrapper">
+    <div class="content">
+      <h2>Subscribe now to get the latest updates!</h2>
+    </div>
+    <form action="index.php" method="POST">
+    <?php 
+    $userEmail = ""; //first we leave email field blank
+    if(isset($_POST['subscribe'])){ //if subscribe btn clicked
+      $userEmail = $_POST['email']; //getting user entered email
+      if(filter_var($userEmail, FILTER_VALIDATE_EMAIL)){ //validating user email
+        $subject = "Thanks for Subscribing us - Gemu Network";
+        $message = "Thanks for subscribing to our Newsletter. You'll receive updates from us. And we won't share your information.";
+        $sender = "From: networkgemu@gmail.com";
+        //php function to send mail
+        if(mail($userEmail, $subject, $message, $sender)){
+          ?>
+           <!-- show sucess message once email send successfully -->
+          <div class="alert success-alert">
+            <?php echo "Thanks for Subscribing us." ?>
           </div>
-          <div class="">
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your notification request was sent. Thank you!</div>
+          <?php
+          $userEmail = "";
+        }else{
+          ?>
+          <!-- show error message if somehow mail can't be sent -->
+          <div class="alert error-alert">
+          <?php echo "Failed while sending your mail!" ?>
           </div>
-        </form>
+          <?php
+        }
+      }else{
+        ?>
+        <!-- show error message if user entered email is not valid -->
+        <div class="alert error-alert">
+          <?php echo "$userEmail is not a valid email address!" ?>
+        </div>
+        <?php
+      }
+    }
+    ?>
+      <div class="field">
+        <input type="text" class="email" name="email" placeholder="Email Address" required value="<?php echo $userEmail ?>">
       </div>
+      <div class="field btn">
+        <div class="layer"></div>
+        <button type="submit" name="subscribe">Subscribe</button>
+      </div>
+    </form>
+    <div class="text">We do not share your information.</div>
+  </div>
+
+      
 
       <div class="social-links text-center">
         <a href="https://twitter.com/gemunetwork/" class="twitter" target="_blank"><i class="bi bi-twitter"></i></a>
